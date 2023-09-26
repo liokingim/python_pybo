@@ -20,8 +20,6 @@ def index(request):
     page_obj = paginator.get_page(page)
     # question_list는 페이징 객체(page_obj)
     context = {'question_list': page_obj}
-    logger.debug('context:')
-    logger.debug(page_obj.paginator.num_pages )
     return render(request, 'pybo/question_list.html', context)
     # return HttpResponse("안녕하세요 pybo에 오신것을 환영합니다.")
 
