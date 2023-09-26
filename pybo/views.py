@@ -4,6 +4,7 @@ from django.utils import timezone
 from django.views import generic
 from .models import Question, Answer
 from .forms import QuestionForm, AnswerForm
+from django.core.paginator import Paginator
 import logging
 
 # logger = logging.getLogger(__name__)
@@ -11,8 +12,16 @@ logger = logging.getLogger('mysite')
 
 # Create your views here.
 def index(request):
+    # 페이지
+    page = request.GET.get('page', '1')
     question_list = Question.objects.order_by('-create_date')
-    context = {'question_list': question_list}
+    # 페이지당 10개씩 보여 주기
+    paginator = Paginator(question_list, 10)
+    page_obj = paginator.get_page(page)
+    # question_list는 페이징 객체(page_obj)
+    context = {'question_list': page_obj}
+    logger.debug('context:')
+    logger.debug(page_obj.paginator.num_pages )
     return render(request, 'pybo/question_list.html', context)
     # return HttpResponse("안녕하세요 pybo에 오신것을 환영합니다.")
 
